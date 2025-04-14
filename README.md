@@ -1,4 +1,4 @@
-# 🧁 scones-ml-workflow  
+# scones-ml-workflow  
 **AWS Machine Learning Engineer Nanodegree Project**
 
 This project is designed for **Scones Unlimited**, a fictional logistics company that delivers freshly baked scones. The goal is to streamline their delivery operations by building and deploying an image classification system that detects the type of vehicle used by each delivery driver. This helps automatically route drivers to the correct loading bay based on whether they’re using a **bicycle** or a **motorcycle**.
