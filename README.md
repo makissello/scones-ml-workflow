@@ -1,5 +1,5 @@
 # 🧁 scones-ml-workflow  
-**AWS Machine Learning Engineer Nanodegree Capstone Project**
+**AWS Machine Learning Engineer Nanodegree Project**
 
 This project is designed for **Scones Unlimited**, a fictional logistics company that delivers freshly baked scones. The goal is to streamline their delivery operations by building and deploying an image classification system that detects the type of vehicle used by each delivery driver. This helps automatically route drivers to the correct loading bay based on whether they’re using a **bicycle** or a **motorcycle**.
 
@@ -48,3 +48,10 @@ As the Machine Learning Engineer, my task was to build a **safe**, **scalable**,
 - Fully automated inference and classification  
 - Modular and scalable cloud-based architecture    
 - Data visualization for inference confidence trends
+
+
+## Step Function Workflow (parallel)
+![Step Function Workflow (parallel)](img/step-function-workflow.png)
+
+## Step Function performs successful inference
+![Step Function performs inference](img/step-function-success.png)
