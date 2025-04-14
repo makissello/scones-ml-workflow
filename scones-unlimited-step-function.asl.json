@@ -1,0 +1,91 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "Map",
+  "States": {
+    "Map": {
+      "Type": "Map",
+      "ItemProcessor": {
+        "ProcessorConfig": {
+          "Mode": "INLINE"
+        },
+        "StartAt": "Serialize Image Data",
+        "States": {
+          "Serialize Image Data": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Arguments": {
+              "FunctionName": "arn:aws:lambda:us-east-1:465430730249:function:serializeImageData:$LATEST",
+              "Payload": "{% $states.input %}"
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                ],
+                "IntervalSeconds": 1,
+                "MaxAttempts": 3,
+                "BackoffRate": 2,
+                "JitterStrategy": "FULL"
+              }
+            ],
+            "Output": "{% $states.result.Payload %}",
+            "Next": "Do Inference on Image"
+          },
+          "Do Inference on Image": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Output": "{% $states.result.Payload %}",
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                ],
+                "IntervalSeconds": 1,
+                "MaxAttempts": 3,
+                "BackoffRate": 2,
+                "JitterStrategy": "FULL"
+              }
+            ],
+            "Arguments": {
+              "FunctionName": "arn:aws:lambda:us-east-1:465430730249:function:doInferenceOnImage:$LATEST",
+              "Payload": "{% $states.input %}"
+            },
+            "Next": "Filter low-confidence Inference"
+          },
+          "Filter low-confidence Inference": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Output": "{% $states.result.Payload %}",
+            "Arguments": {
+              "FunctionName": "arn:aws:lambda:us-east-1:465430730249:function:filterLowConfidenceInference:$LATEST",
+              "Payload": "{% $states.input %}"
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                ],
+                "IntervalSeconds": 1,
+                "MaxAttempts": 3,
+                "BackoffRate": 2,
+                "JitterStrategy": "FULL"
+              }
+            ],
+            "End": true
+          }
+        }
+      },
+      "End": true
+    }
+  },
+  "QueryLanguage": "JSONata"
+}
